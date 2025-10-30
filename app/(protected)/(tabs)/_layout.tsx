@@ -10,7 +10,7 @@ export default function TabLayout() {
         options={{
           title: "Home",
           headerShown: false,
-          tabBarIcon: () => <Home size={16} color="grey" />,
+          tabBarIcon: () => <Home size={24} color="grey" />,
         }}
       />
     </Tabs>

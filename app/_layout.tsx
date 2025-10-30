@@ -9,7 +9,7 @@ import "../lib/styles/root.css";
 export default function RootLayout() {
   return (
     <Providers>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
       <Stack>
         <Stack.Screen name="(protected)" options={{ headerShown: false }} />
         <Stack.Screen name="(public)" options={{ headerShown: false }} />
