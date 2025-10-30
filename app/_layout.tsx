@@ -1,15 +1,19 @@
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import '../lib/i18n';
+
+import Providers from "@/utils/Providers";
+
+import "../lib/i18n";
+import "../lib/styles/root.css";
 
 export default function RootLayout() {
   return (
-    <>
-      <StatusBar style="auto" />
+    <Providers>
+      <StatusBar style="light" />
       <Stack>
         <Stack.Screen name="(protected)" options={{ headerShown: false }} />
         <Stack.Screen name="(public)" options={{ headerShown: false }} />
       </Stack>
-    </>
+    </Providers>
   );
 }

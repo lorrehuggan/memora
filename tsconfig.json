@@ -3,7 +3,11 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/styles/*": ["./lib/styles/*"]
+      "@/styles/*": ["./lib/styles/*"],
+      "@/components/*": ["./lib/components/*"],
+      "@/types/*": ["./lib/types/*"],
+      "@/features/*": ["./lib/features/*"],
+      "@/utils/*": ["./lib/utils/*"]
     }
   }
 }
