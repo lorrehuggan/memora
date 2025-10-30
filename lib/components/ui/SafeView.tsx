@@ -9,7 +9,7 @@ interface SafeViewProps {
 
 export default function SafeView({ children, className, ...rest }: SafeViewProps) {
   return (
-    <SafeAreaView className={`h-screen bg-neutral-900 p-6 ${className || ""}`} {...rest}>
+    <SafeAreaView className={`h-screen bg-neutral-950 p-4 ${className || ""}`} {...rest}>
       {children}
     </SafeAreaView>
   );
