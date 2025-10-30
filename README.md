@@ -55,7 +55,7 @@ bun run type-check    # Run TypeScript compiler without emitting files
 # Development
 bun start            # Start Expo development server
 bun run android      # Start Android development
-bun run ios          # Start iOS development  
+bun run ios          # Start iOS development
 bun run web          # Start web development
 ```
 
@@ -107,17 +107,20 @@ memora/
 ## Linting Rules Highlights
 
 ### TypeScript
+
 - Unused variables error (with underscore prefix exception)
 - Consistent type imports enforcement
 - Explicit any warnings
 
 ### React/React Native
+
 - No unused styles detection
 - Platform component splitting enforcement
 - Inline styles warnings (prefer StyleSheet)
 - Color literal warnings (use theme/constants)
 
 ### Code Style
+
 - Prefer const over let/var
 - Console warnings (remove in production)
 - Debugger statements error in production

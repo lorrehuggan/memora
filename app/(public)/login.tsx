@@ -1,6 +1,6 @@
-import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
 
+import { useTranslation } from "react-i18next";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoginScreen() {
@@ -9,7 +9,7 @@ export default function LoginScreen() {
   return (
     <SafeAreaView>
       <View>
-        <Text style={text}>{t('common:login')}</Text>
+        <Text style={text}>{t("common:login")}</Text>
       </View>
     </SafeAreaView>
   );
