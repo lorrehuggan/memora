@@ -87,6 +87,26 @@ export default [
   },
   prettierConfig,
   {
+    files: ["**/*.cjs"],
+    languageOptions: {
+      sourceType: "commonjs",
+      globals: {
+        __dirname: "readonly",
+        __filename: "readonly",
+        require: "readonly",
+        module: "readonly",
+        exports: "readonly",
+        console: "readonly",
+        process: "readonly",
+        global: "readonly",
+        Buffer: "readonly",
+      },
+    },
+    rules: {
+      "no-undef": "off", // CommonJS globals are handled above
+    },
+  },
+  {
     ignores: [
       "node_modules/",
       ".expo/",
@@ -94,8 +114,10 @@ export default [
       "build/",
       "*.config.js",
       "metro.config.js",
+      "metro.config.cjs",
       ".eslintrc.js",
       "tailwind.config.js",
+      "tailwind.config.cjs",
     ],
   },
 ];
