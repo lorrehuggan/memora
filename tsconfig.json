@@ -7,7 +7,9 @@
       "@/components/*": ["./lib/components/*"],
       "@/types/*": ["./lib/types/*"],
       "@/features/*": ["./lib/features/*"],
-      "@/utils/*": ["./lib/utils/*"]
+      "@/utils/*": ["./lib/utils/*"],
+      "@/hooks/*": ["./lib/hooks/*"],
+      "@/lib/*": ["./lib/*"]
     }
   }
 }
