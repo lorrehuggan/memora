@@ -1,29 +1,14 @@
-import { Alert, Text, View } from "react-native";
-
-import { router } from "expo-router";
+import { Text, View } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import AppText from "@/components/ui/appText";
 import { Button } from "@/components/ui/button";
-import { authClient } from "@/features/auth/lib/client";
+import { useAuth } from "@/features/auth/lib/Provider";
+import { logout } from "@/utils/index";
 
 export default function IndexScreen() {
-  const logout = async () => {
-    const { data, error } = await authClient.signOut({
-      fetchOptions: {
-        headers: {
-          "Content-Type": "application/json",
-          Origin: "http://192.168.1.88:8081",
-        },
-      },
-    });
-    if (data?.success) {
-      Alert.alert(data.success === true ? "Logout successful" : "Logout failed");
-      return router.replace("/login");
-    } else if (error) {
-      Alert.alert(`Logout failed ${error.message}`);
-    }
-  };
+  const { session } = useAuth();
   return (
     <SafeAreaView>
       <View>
@@ -31,6 +16,7 @@ export default function IndexScreen() {
         <Button variant="ghost" onPress={logout}>
           <Text>Logout</Text>
         </Button>
+        <AppText>{session?.user.name}</AppText>
       </View>
     </SafeAreaView>
   );
