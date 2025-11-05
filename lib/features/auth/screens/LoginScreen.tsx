@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import { Alert, KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 
+import { Link } from "expo-router";
+
 import { arktypeResolver } from "@hookform/resolvers/arktype";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -44,9 +46,6 @@ export default function LoginScreen() {
 
       if (result.error) {
         Alert.alert("Sign In Error", result.error.message || "Failed to sign in");
-      } else {
-        // Navigation will be handled by your auth state management
-        Alert.alert("Success", "Signed in successfully!");
       }
     } catch {
       // Log error for debugging
@@ -67,17 +66,17 @@ export default function LoginScreen() {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <View className="flex-1 justify-center px-2 py-2">
+          <View className="flex-1 justify-center">
             {/* Header */}
-            <View className="mb-10 items-center">
-              <View className="mb-6 h-16 w-16 items-center justify-center rounded-full bg-neutral-100">
+            <View className="mb-8 items-center">
+              <View className="mb-4 h-16 w-16 items-center justify-center rounded-full bg-neutral-100">
                 <AppText>M</AppText>
               </View>
-              <AppText className="mb-2 text-3xl font-bold text-brand">
+              <AppTextBold className="text-brand tracking-tightest mb-2 text-3xl font-bold">
                 {t("common:app_name")}
-              </AppText>
+              </AppTextBold>
               <AppText className="text-center text-base text-gray-600">
-                {t("login:sign_in_message")}{" "}
+                {t("auth:sign_in_message")}{" "}
               </AppText>
             </View>
             {/* Header */}
@@ -88,7 +87,7 @@ export default function LoginScreen() {
                 name="email"
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
-                    className="mb-2"
+                    className="mb-4"
                     placeholder="Enter your email"
                     value={value}
                     onChangeText={onChange}
@@ -102,7 +101,7 @@ export default function LoginScreen() {
               />
 
               {errors.email && (
-                <AppText className="mb-2 text-xs text-red-500">{errors.email.message}</AppText>
+                <AppText className="mb-2 text-xs text-destructive">{errors.email.message}</AppText>
               )}
 
               <Controller
@@ -110,7 +109,7 @@ export default function LoginScreen() {
                 name="password"
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
-                    className="mb-2"
+                    className="mb-4"
                     placeholder="Enter your password"
                     value={value}
                     onChangeText={onChange}
@@ -122,7 +121,9 @@ export default function LoginScreen() {
                 )}
               />
               {errors.password && (
-                <AppText className="mb-2 text-xs text-red-500">{errors.password.message}</AppText>
+                <AppText className="mb-2 text-xs text-destructive">
+                  {errors.password.message}
+                </AppText>
               )}
 
               <Button
@@ -136,7 +137,7 @@ export default function LoginScreen() {
             </View>
 
             {/* Footer */}
-            <View className="items-center space-y-4">
+            <View className="items-center">
               <AppText className="text-sm text-gray-600">Forgot your password?</AppText>
               <View className="flex-row items-center">
                 <View className="h-px flex-1 bg-gray-300" />
@@ -145,7 +146,9 @@ export default function LoginScreen() {
               </View>
               <AppText className="text-sm text-gray-600">
                 Don't have an account?{" "}
-                <AppTextBold className="font-semibold text-indigo-700">Sign Up</AppTextBold>
+                <Link href="/signup" asChild>
+                  <AppTextBold className="font-semibold text-indigo-700">Sign Up</AppTextBold>
+                </Link>
               </AppText>
             </View>
             {/* Form */}
