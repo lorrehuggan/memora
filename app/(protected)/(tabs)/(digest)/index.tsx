@@ -12,7 +12,7 @@ export default function IndexScreen() {
   return (
     <SafeAreaView>
       <View>
-        <Text>Hello, World!</Text>
+        <Text>Digest</Text>
         <Button variant="ghost" onPress={logout}>
           <Text>Logout</Text>
         </Button>

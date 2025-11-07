@@ -6,7 +6,7 @@ export default function ProtectedLayout() {
   const { session } = useAuth();
 
   if (session) {
-    return <Redirect href="/(protected)/" />;
+    return <Redirect href="/(tabs)/(reflect)" />;
   }
 
   return (
