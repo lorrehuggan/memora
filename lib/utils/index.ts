@@ -27,3 +27,17 @@ export const logout = async () => {
     Alert.alert(`Logout failed ${error.message}`);
   }
 };
+
+export function millisecondsToTime(milliseconds: number): string {
+  // Convert milliseconds to total seconds
+  const totalSeconds = Math.floor(milliseconds / 1000);
+
+  // Calculate hours, minutes, and seconds
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  // Pad with leading zeros
+  const pad = (num: number): string => num.toString().padStart(2, "0");
+
+  return `${pad(minutes)}:${pad(seconds)}`;
+}

@@ -3,12 +3,12 @@ import { create } from "zustand";
 type RecordingStatus = "recording" | "paused" | "stopped" | "error" | "uploading" | "inactive";
 
 interface RecordingActions {
-  startRecording: () => void;
-  pauseRecording: () => void;
-  stopRecording: () => void;
-  uploadRecording: () => void;
-  errorRecording: () => void;
-  inactiveRecording: () => void;
+  setStartRecording: () => void;
+  setPauseRecording: () => void;
+  setStopRecording: () => void;
+  setUploadRecording: () => void;
+  setErrorRecording: () => void;
+  setInactiveRecording: () => void;
 }
 interface RecordingState {
   recording: RecordingStatus;
@@ -18,12 +18,12 @@ interface RecordingState {
 const useRecordingStore = create<RecordingState>(set => ({
   recording: "inactive",
   actions: {
-    startRecording: () => set({ recording: "recording" }),
-    pauseRecording: () => set({ recording: "paused" }),
-    stopRecording: () => set({ recording: "stopped" }),
-    uploadRecording: () => set({ recording: "uploading" }),
-    errorRecording: () => set({ recording: "error" }),
-    inactiveRecording: () => set({ recording: "inactive" }),
+    setStartRecording: () => set({ recording: "recording" }),
+    setPauseRecording: () => set({ recording: "paused" }),
+    setStopRecording: () => set({ recording: "stopped" }),
+    setUploadRecording: () => set({ recording: "uploading" }),
+    setErrorRecording: () => set({ recording: "error" }),
+    setInactiveRecording: () => set({ recording: "inactive" }),
   },
 }));
 

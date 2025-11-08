@@ -1,7 +1,10 @@
 import { useState } from "react";
 
-import { Alert, View } from "react-native";
+import { Alert, Pressable, View } from "react-native";
 
+import * as Haptics from "expo-haptics";
+
+import clsx from "clsx";
 import { Mic } from "lucide-react-native";
 import { useForm } from "react-hook-form";
 
@@ -12,6 +15,7 @@ import { useRecording } from "@/features/recording/hooks/useRecording";
 import type { RecordingState } from "@/features/recording/types";
 import { useAudioUpload } from "@/features/reflect/hooks/useReflections";
 import type { ReflectionMetadata } from "@/features/reflect/types";
+import { millisecondsToTime } from "@/utils/index";
 
 export default function ReflectScreen() {
   const [recordingState, setRecordingState] = useState<RecordingState>("inactive");
@@ -46,6 +50,7 @@ export default function ReflectScreen() {
 
   const handleStartRecording = async () => {
     try {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       await startRecording();
       setRecordingState("recording");
     } catch (err) {
@@ -55,15 +60,16 @@ export default function ReflectScreen() {
 
   const handleStopRecording = async () => {
     try {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       setRecordingState("uploading");
       const recordingUri = await stopRecording();
 
       if (recordingUri && !recordingError) {
         // Upload the recording with metadata
-        await uploadMutation.mutateAsync({
-          fileUri: recordingUri,
-          metadata: savedMetadata,
-        });
+        // await uploadMutation.mutateAsync({
+        //   fileUri: recordingUri,
+        //   metadata: savedMetadata,
+        // });
 
         Alert.alert("Success", "Recording uploaded successfully!");
         handleReset();
@@ -91,12 +97,20 @@ export default function ReflectScreen() {
           <AppText className="mx-auto flex pb-3 pt-4 capitalize">
             {recordingState === "inactive" ? "Start new recording" : recordingState}
           </AppText>
-          <AppTextBold className="p-1 text-6xl">00:32:05</AppTextBold>
+          <AppTextBold className="p-1 text-6xl">{millisecondsToTime(duration)}</AppTextBold>
         </View>
-        <View className="mx-auto rounded-full border-2 border-black bg-violet-600/10 p-16">
+        <Pressable
+          onPressIn={handleStartRecording}
+          onPressOut={handleStopRecording}
+          className={clsx("mx-auto rounded-full border-2 border-black p-16", {
+            "bg-rose-600/10": recordingState === "recording",
+            "bg-gray-200": recordingState === "inactive",
+            "bg-yellow-500/10": recordingState === "uploading",
+          })}
+        >
           <Mic size={80} strokeWidth={1.5} />
-        </View>
-        <View className="mx-auto w-full rounded-2xl bg-black/10 p-16"></View>
+        </Pressable>
+        <View className="mx-auto w-full rounded-2xl p-16"></View>
       </View>
     </SafeView>
   );
