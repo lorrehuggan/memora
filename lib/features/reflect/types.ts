@@ -1,6 +1,7 @@
 export interface ReflectionMetadata {
   title: string;
   description: string;
+  tags?: string;
 }
 
 export interface UploadAudioVariables {

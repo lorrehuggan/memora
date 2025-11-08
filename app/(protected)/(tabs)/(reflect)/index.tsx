@@ -6,23 +6,24 @@ import * as Haptics from "expo-haptics";
 
 import clsx from "clsx";
 import { Mic } from "lucide-react-native";
-import { useForm } from "react-hook-form";
 
 import AppText from "@/components/ui/appText";
 import AppTextBold from "@/components/ui/appTextBold";
 import SafeView from "@/components/ui/safeView";
 import { useRecording } from "@/features/recording/hooks/useRecording";
 import type { RecordingState } from "@/features/recording/types";
+import AudioReviewModal from "@/features/reflect/components/AudioReviewModal";
+import ReflectionMetadataModal from "@/features/reflect/components/ReflectionMetadataModal";
 import { useAudioUpload } from "@/features/reflect/hooks/useReflections";
 import type { ReflectionMetadata } from "@/features/reflect/types";
 import { millisecondsToTime } from "@/utils/index";
 
 export default function ReflectScreen() {
   const [recordingState, setRecordingState] = useState<RecordingState>("inactive");
-  const [savedMetadata, setSavedMetadata] = useState<ReflectionMetadata | undefined>();
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [showMetadataModal, setShowMetadataModal] = useState(false);
 
   const {
-    isRecording,
     duration,
     fileUri,
     error: recordingError,
@@ -31,22 +32,6 @@ export default function ReflectScreen() {
     reset,
   } = useRecording();
   const uploadMutation = useAudioUpload();
-
-  const {
-    control,
-    handleSubmit,
-    reset: resetForm,
-  } = useForm<ReflectionMetadata>({
-    defaultValues: {
-      title: "",
-      description: "",
-    },
-  });
-
-  const handleMetadataSubmit = handleSubmit(async (metadata: ReflectionMetadata) => {
-    setSavedMetadata(metadata);
-    setRecordingState("inactive");
-  });
 
   const handleStartRecording = async () => {
     try {
@@ -61,33 +46,78 @@ export default function ReflectScreen() {
   const handleStopRecording = async () => {
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      setRecordingState("uploading");
       const recordingUri = await stopRecording();
 
       if (recordingUri && !recordingError) {
-        // Upload the recording with metadata
-        // await uploadMutation.mutateAsync({
-        //   fileUri: recordingUri,
-        //   metadata: savedMetadata,
-        // });
+        // Check minimum duration (2 seconds = 2000ms)
+        if (duration < 2000) {
+          Alert.alert("Recording Too Short", "Please hold for at least 2 seconds.");
+          handleReset();
+          return;
+        }
 
-        Alert.alert("Success", "Recording uploaded successfully!");
-        handleReset();
+        // Open review modal
+        setRecordingState("reviewing");
+        setShowReviewModal(true);
       }
     } catch (err) {
+      Alert.alert("Error", err instanceof Error ? err.message : "Failed to stop recording");
+      setRecordingState("inactive");
+    }
+  };
+
+  const handleContinueFromReview = () => {
+    setShowReviewModal(false);
+    setRecordingState("adding-metadata");
+    setShowMetadataModal(true);
+  };
+
+  const handleReRecord = () => {
+    setShowReviewModal(false);
+    handleReset();
+  };
+
+  const handleCancelReview = () => {
+    setShowReviewModal(false);
+    handleReset();
+  };
+
+  const handleCancelMetadata = () => {
+    setShowMetadataModal(false);
+    setRecordingState("reviewing");
+    setShowReviewModal(true);
+  };
+
+  const handleMetadataSubmit = async (metadata: ReflectionMetadata) => {
+    try {
+      setRecordingState("uploading");
+
+      if (!fileUri) {
+        throw new Error("No recording file found");
+      }
+
+      await uploadMutation.mutateAsync({
+        fileUri,
+        metadata,
+      });
+
+      Alert.alert("Success", "Recording uploaded successfully!");
+      setShowMetadataModal(false);
+      handleReset();
+    } catch (err) {
       Alert.alert(
-        "Error",
-        err instanceof Error ? err.message : "Failed to stop recording or upload"
+        "Upload Error",
+        err instanceof Error ? err.message : "Failed to upload recording. Please try again."
       );
-      setRecordingState("recording");
+      setRecordingState("adding-metadata");
     }
   };
 
   const handleReset = () => {
     reset();
-    resetForm();
-    setSavedMetadata(undefined);
     setRecordingState("inactive");
+    setShowReviewModal(false);
+    setShowMetadataModal(false);
   };
 
   return (
@@ -112,6 +142,24 @@ export default function ReflectScreen() {
         </Pressable>
         <View className="mx-auto w-full rounded-2xl p-16"></View>
       </View>
+
+      {/* Audio Review Modal */}
+      <AudioReviewModal
+        visible={showReviewModal}
+        fileUri={fileUri}
+        duration={duration}
+        onContinue={handleContinueFromReview}
+        onReRecord={handleReRecord}
+        onCancel={handleCancelReview}
+      />
+
+      {/* Reflection Metadata Modal */}
+      <ReflectionMetadataModal
+        visible={showMetadataModal}
+        onSubmit={handleMetadataSubmit}
+        onCancel={handleCancelMetadata}
+        isUploading={uploadMutation.isPending}
+      />
     </SafeView>
   );
 }
