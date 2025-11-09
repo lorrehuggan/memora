@@ -6,12 +6,13 @@ export default function ProtectedLayout() {
   const { session } = useAuth();
 
   if (session) {
-    return <Redirect href="/(protected)/" />;
+    return <Redirect href="/(tabs)/(reflect)" />;
   }
 
   return (
     <Stack>
       <Stack.Screen name="login" options={{ headerShown: false }} />
+      <Stack.Screen name="signup" options={{ headerShown: false }} />
     </Stack>
   );
 }

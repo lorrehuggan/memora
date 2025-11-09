@@ -1,16 +1,40 @@
 import { Tabs } from "expo-router";
 
-import { Home } from "lucide-react-native";
+import { BookOpen, Cookie, MessageSquare, Sparkles } from "lucide-react-native";
 
 export default function TabLayout() {
   return (
-    <Tabs>
+    <Tabs initialRouteName="(reflect)">
       <Tabs.Screen
-        name="(home)"
+        name="(reflect)"
         options={{
-          title: "Home",
+          title: "Reflect",
           headerShown: false,
-          tabBarIcon: () => <Home size={24} color="grey" />,
+          tabBarIcon: () => <Sparkles />,
+        }}
+      />
+      <Tabs.Screen
+        name="(journal)"
+        options={{
+          title: "Journal",
+          headerShown: false,
+          tabBarIcon: () => <BookOpen />,
+        }}
+      />
+      <Tabs.Screen
+        name="(ask)"
+        options={{
+          title: "Ask",
+          headerShown: false,
+          tabBarIcon: () => <MessageSquare />,
+        }}
+      />
+      <Tabs.Screen
+        name="(digest)"
+        options={{
+          title: "Digest",
+          headerShown: false,
+          tabBarIcon: () => <Cookie />,
         }}
       />
     </Tabs>

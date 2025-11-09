@@ -23,8 +23,10 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "expo": "~54.0.20",
+    "expo-audio": "~1.0.14",
     "expo-constants": "~18.0.10",
     "expo-font": "~14.0.9",
+    "expo-haptics": "~15.0.7",
     "expo-linking": "~8.0.8",
     "expo-localization": "~17.0.7",
     "expo-router": "~6.0.14",
@@ -43,7 +45,8 @@
     "react-native-screens": "~4.16.0",
     "tailwind-merge": "^3.3.1",
     "tailwind-variants": "^3.1.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",

@@ -13,39 +13,50 @@ import AppTextBold from "@/components/ui/appTextBold";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import SafeView from "@/components/ui/safeView";
-import { type LoginForm, loginSchema } from "@/utils/schemas/auth";
+import { type SignUpForm, signUpSchema } from "@/utils/schemas/auth";
 
 import { authClient } from "../lib/client";
 
-export default function LoginScreen() {
+export default function SignUpScreen() {
   const [loading, setIsLoading] = useState(false);
   const { t } = useTranslation();
 
   const {
     control,
     handleSubmit,
+    watch,
     formState: { errors },
-  } = useForm<LoginForm>({
-    resolver: arktypeResolver(loginSchema),
+  } = useForm<SignUpForm>({
+    resolver: arktypeResolver(signUpSchema),
     defaultValues: {
       email: "",
       password: "",
+      confirmPassword: "",
+      name: "",
     },
   });
 
-  const onSubmit = async (data: LoginForm) => {
+  const watchedPassword = watch("password");
+
+  const onSubmit = async (data: SignUpForm) => {
+    if (data.password !== data.confirmPassword) {
+      Alert.alert("Error", "Passwords do not match");
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      const { email, password } = data;
+      const { email, password, name } = data;
 
-      const result = await authClient.signIn.email({
+      const result = await authClient.signUp.email({
         email,
         password,
+        name,
       });
 
       if (result.error) {
-        Alert.alert("Sign In Error", result.error.message || "Failed to sign in");
+        Alert.alert("Sign Up Error", result.error.message || "Failed to create account");
       }
     } catch {
       // Log error for debugging
@@ -76,19 +87,41 @@ export default function LoginScreen() {
                 {t("common:app_name")}
               </AppTextBold>
               <AppText className="text-center text-base text-gray-600">
-                {t("auth:sign_in_message")}{" "}
+                {t("auth:sign_up_message")}{" "}
               </AppText>
             </View>
             {/* Header */}
+
             {/* Form */}
             <View className="mb-6">
+              <Controller
+                control={control}
+                name="name"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    className="mb-4"
+                    placeholder={t("auth:enter_name")}
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    autoCapitalize="words"
+                    autoComplete="name"
+                    textContentType="name"
+                  />
+                )}
+              />
+
+              {errors.name && (
+                <AppText className="mb-2 text-xs text-destructive">{errors.name.message}</AppText>
+              )}
+
               <Controller
                 control={control}
                 name="email"
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
                     className="mb-4"
-                    placeholder="Enter your email"
+                    placeholder={t("auth:enter_email")}
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
@@ -110,20 +143,52 @@ export default function LoginScreen() {
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
                     className="mb-4"
-                    placeholder="Enter your password"
+                    placeholder={t("auth:enter_password")}
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
                     secureTextEntry
-                    autoComplete="password"
-                    textContentType="password"
+                    autoComplete="new-password"
+                    textContentType="newPassword"
                   />
                 )}
               />
+
               {errors.password && (
                 <AppText className="mb-2 text-xs text-destructive">
                   {errors.password.message}
                 </AppText>
+              )}
+
+              <Controller
+                control={control}
+                name="confirmPassword"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    className="mb-4"
+                    placeholder={t("auth:confirm_password")}
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    secureTextEntry
+                    autoComplete="new-password"
+                    textContentType="newPassword"
+                  />
+                )}
+              />
+
+              {errors.confirmPassword && (
+                <AppText className="mb-2 text-xs text-destructive">
+                  {errors.confirmPassword.message}
+                </AppText>
+              )}
+
+              {watchedPassword && watchedPassword.length > 0 && (
+                <View className="mb-4">
+                  <AppText className="text-xs text-gray-600">
+                    Password must be at least 7 characters long
+                  </AppText>
+                </View>
               )}
 
               <Button
@@ -132,22 +197,23 @@ export default function LoginScreen() {
                 className="w-full"
                 size="lg"
               >
-                <AppText className="text-background">Login</AppText>
+                <AppText className="text-background">{t("login:create_account")}</AppText>
               </Button>
             </View>
 
             {/* Footer */}
             <View className="items-center">
-              <AppText className="text-sm text-gray-600">Forgot your password?</AppText>
               <View className="flex-row items-center">
                 <View className="h-px flex-1 bg-gray-300" />
                 <AppText className="mx-4 text-sm text-gray-500">OR</AppText>
                 <View className="h-px flex-1 bg-gray-300" />
               </View>
               <AppText className="text-sm text-gray-600">
-                Don't have an account?{" "}
-                <Link href="/signup" asChild>
-                  <AppTextBold className="font-semibold text-indigo-700">Sign Up</AppTextBold>
+                {t("auth:have_account")}{" "}
+                <Link href="/login" asChild>
+                  <AppTextBold className="font-semibold text-indigo-700">
+                    {t("auth:sign_in")}
+                  </AppTextBold>
                 </Link>
               </AppText>
             </View>

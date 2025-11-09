@@ -11,7 +11,7 @@ interface SafeViewProps {
 
 export default function SafeView({ children, className, ...rest }: SafeViewProps) {
   return (
-    <SafeAreaView className={cn(className, "h-screen px-4")} {...rest}>
+    <SafeAreaView className={cn(className, "h-screen p-4")} {...rest}>
       {children}
     </SafeAreaView>
   );

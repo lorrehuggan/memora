@@ -1,6 +1,6 @@
 import { useContext } from "react";
 
-import { QueryContext } from "../lib/Provider";
+import { QueryContext } from "./provider";
 
 export function useQueryClient() {
   const client = useContext(QueryContext);

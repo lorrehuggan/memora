@@ -8,7 +8,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 
 import { fontFamily } from "@/styles/fontFamily";
-import Providers from "@/utils/Providers";
+import AppProviders from "@/utils/appProviders";
 
 import "../global.css";
 import "../lib/i18n";
@@ -28,12 +28,12 @@ export default function RootLayout() {
   }, [loaded, error]);
 
   return (
-    <Providers>
+    <AppProviders>
       <StatusBar style={colorScheme === "light" ? "dark" : "light"} />
       <Stack>
         <Stack.Screen name="(protected)" options={{ headerShown: false }} />
         <Stack.Screen name="(public)" options={{ headerShown: false }} />
       </Stack>
-    </Providers>
+    </AppProviders>
   );
 }

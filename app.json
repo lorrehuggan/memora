@@ -28,11 +28,6 @@
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
-    "plugins": [
-      "expo-router",
-      "expo-localization",
-      "expo-secure-store",
-      "expo-font"
-    ]
+    "plugins": ["expo-router", "expo-localization", "expo-secure-store", "expo-font", "expo-audio"]
   }
 }
