@@ -10,6 +10,7 @@ import { Mic } from "lucide-react-native";
 import AppText from "@/components/ui/appText";
 import AppTextBold from "@/components/ui/appTextBold";
 import SafeView from "@/components/ui/safeView";
+import AudioWaveform from "@/features/recording/components/AudioWaveform";
 import { useRecording } from "@/features/recording/hooks/useRecording";
 import type { RecordingState } from "@/features/recording/types";
 import AudioReviewModal from "@/features/reflect/components/AudioReviewModal";
@@ -27,6 +28,7 @@ export default function ReflectScreen() {
     duration,
     fileUri,
     error: recordingError,
+    amplitudes,
     startRecording,
     stopRecording,
     reset,
@@ -140,7 +142,11 @@ export default function ReflectScreen() {
         >
           <Mic size={80} strokeWidth={1.5} />
         </Pressable>
-        <View className="mx-auto w-full rounded-2xl p-16"></View>
+        <View className="mx-auto w-full rounded-2xl p-16">
+          {(recordingState === "recording" || recordingState === "reviewing") && (
+            <AudioWaveform amplitudes={amplitudes} isRecording={recordingState === "recording"} />
+          )}
+        </View>
       </View>
 
       {/* Audio Review Modal */}
