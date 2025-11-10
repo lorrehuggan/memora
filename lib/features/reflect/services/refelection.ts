@@ -1,8 +1,7 @@
 import { authClient } from "@/features/auth/lib/client";
+import { API_URL } from "@/lib/config/env";
 
 import type { GetReflectionOptions, ReflectionResponse } from "../types";
-
-const API_URL = process.env.API_URL;
 
 export async function getReflections(options?: GetReflectionOptions): Promise<ReflectionResponse> {
   try {
