@@ -1,0 +1,46 @@
+require("dotenv").config();
+
+module.exports = {
+  expo: {
+    name: "memora",
+    slug: "memora",
+    scheme: "memora",
+    version: "0.0.1",
+    orientation: "portrait",
+    icon: "./assets/icon.png",
+    userInterfaceStyle: "light",
+    newArchEnabled: true,
+    splash: {
+      image: "./assets/splash-icon.png",
+      resizeMode: "contain",
+      backgroundColor: "#ffffff",
+    },
+    ios: {
+      supportsTablet: true,
+    },
+    android: {
+      adaptiveIcon: {
+        foregroundImage: "./assets/adaptive-icon.png",
+        backgroundColor: "#ffffff",
+      },
+      edgeToEdgeEnabled: true,
+      predictiveBackGestureEnabled: false,
+    },
+    web: {
+      favicon: "./assets/favicon.png",
+      bundler: "metro",
+    },
+    plugins: [
+      "expo-router",
+      "expo-localization",
+      "expo-secure-store",
+      "expo-font",
+      "expo-audio",
+    ],
+    extra: {
+      apiUrl: process.env.API_URL,
+      baseUrl: process.env.BASE_URL,
+      betterAuthSecret: process.env.BETTER_AUTH_SECRET,
+    },
+  },
+};
